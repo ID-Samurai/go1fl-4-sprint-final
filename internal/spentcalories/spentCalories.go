@@ -73,10 +73,10 @@ func TrainingInfo(data string, weight, height float64) string {
 	switch typeTrain {
 	case "Бег":
 		kcal := RunningSpentCalories(steps, weight, timeTrain)
-		return fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %f км.\nСкорость: %f км/ч\nСожгли калорий: %f", typeTrain, hour, dist, speed, kcal)
+		return fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %f км.\nСкорость: %f км/ч\nСожгли калорий: %f\n", typeTrain, hour, dist, speed, kcal)
 	case "Ходьба":
 		kcal := WalkingSpentCalories(steps, weight, height, timeTrain)
-		return fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %f км.\nСкорость: %f км/ч\nСожгли калорий: %f", typeTrain, hour, dist, speed, kcal)
+		return fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %f км.\nСкорость: %f км/ч\nСожгли калорий: %f\n", typeTrain, hour, dist, speed, kcal)
 	default:
 		return "неизвестный тип тренировки"
 	}
