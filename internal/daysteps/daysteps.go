@@ -1,7 +1,13 @@
 package daysteps
 
 import (
+	"errors"
+	"fmt"
+	"strconv"
+	"strings"
 	"time"
+
+	"github.com/ID-Samurai/go1fl-4-sprint-final/internal/spentcalories"
 )
 
 var (
@@ -9,7 +15,26 @@ var (
 )
 
 func parsePackage(data string) (int, time.Duration, error) {
-	// ваш код ниже
+	sliceData := strings.Split(data, ",")
+	if len(sliceData) != 2 {
+		return 0, 0, errors.New("Не коректное число входных параметров")
+	}
+	steps, err := strconv.Atoi(sliceData[0])
+	if err != nil {
+		return 0, 0, err
+	}
+	if steps <= 0 {
+		return 0, 0, errors.New("Количество шагов должно быть больше 0")
+	}
+	walkingTime, err := time.ParseDuration(sliceData[1])
+	if err != nil {
+		return 0, 0, err
+	}
+	if walkingTime.Seconds() == 0 {
+		return 0, 0, errors.New("Время активности должно быть больше 0")
+	}
+	return steps, walkingTime, nil
+
 }
 
 // DayActionInfo обрабатывает входящий пакет, который передаётся в
@@ -19,5 +44,17 @@ func parsePackage(data string) (int, time.Duration, error) {
 // Если пакет валидный, он добавляется в слайс storage, который возвращает
 // функция. Если пакет невалидный, storage возвращается без изменений.
 func DayActionInfo(data string, weight, height float64) string {
-	// ваш код ниже
+	steps, walkingTime, err := parsePackage(data)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ""
+	}
+	if steps <= 0 {
+		return ""
+	}
+	distance := float64(steps) * StepLength
+	distance = distance / 1000
+	kcal := spentcalories.WalkingSpentCalories(steps, weight, height, walkingTime)
+
+	return fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n", steps, distance, kcal)
 }
