@@ -30,6 +30,9 @@ func parsePackage(data string) (int, time.Duration, error) {
 	if err != nil {
 		return 0, 0, err
 	}
+	if walkingTime.Seconds() == 0 {
+		return 0, 0, errors.New("Время активности должно быть больше 0")
+	}
 	return steps, walkingTime, nil
 
 }
